@@ -51,6 +51,8 @@ export class Server {
       this.fireEvent(this.EVENTS.PASSWORD_CHANGED, data));
     this.socket.on(this.EVENTS.LOGOUT_ALL_USERS, (data: any) => 
       this.fireEvent(this.EVENTS.LOGOUT_ALL_USERS, data));
+    this.socket.on(this.EVENTS.INFO_ABOUT_THE_GAMERS, (data: any) =>
+      this.fireEvent(this.EVENTS.INFO_ABOUT_THE_GAMERS, data));
   
     this.socket.on('connect', () => console.log('sockets connected'));
   }
@@ -71,7 +73,8 @@ export class Server {
     GET_NAMES: "GET_NAMES",
     SPEED_SHANGE: "SPEED_CHANGE",
     PASSWORD_CHANGED: "PASSWORD_CHANGED",
-    LOGOUT_ALL_USERS: "LOGOUT_ALL_USERS"
+    LOGOUT_ALL_USERS: "LOGOUT_ALL_USERS",
+    INFO_ABOUT_THE_GAMERS: "INFO_ABOUT_THE_GAMERS"
   };
   
   events: { [key: string]: any[] } = {};
@@ -185,8 +188,22 @@ export class Server {
     this.socket.emit(this.MESSAGES.STOP_MOVE);
   }
 
-  changeDireciton(x: number, y: number) {
-    this.socket.emit(this.MESSAGES.CHANGE_DIRECTION, { x, y });
+  changePosition(position: object) {
+    const data = {
+      position,
+      gameName: this.cookieService.get('game'),
+      token: this.cookieService.get('token')
+    };
+    this.socket.emit(this.MESSAGES.CHANGE_POSITION, data);
+  }
+  
+  changeCameraRotation(rotationParams: object) {
+    const data = {
+      rotationParams,
+      gameName: this.cookieService.get('game'),
+      token: this.cookieService.get('token')
+    };
+    this.socket.emit(this.MESSAGES.CHANGE_CAMERA_ROTATION, data);
   }
 
   getNames() {

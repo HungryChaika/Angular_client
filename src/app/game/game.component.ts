@@ -140,12 +140,14 @@ export class GameComponent implements OnInit {
   }
 
   move(direction: Direction) {
+    let button = null;
     switch (direction) {
       case Direction.Forward: {
         /* this.camera.position.x -= this.constMove * Math.sin(Math.PI * this.mousex);
         this.camera.position.z -= this.constMove * Math.cos(Math.PI * this.mousex); */
         this.nextCameraPosition.x -= this.constMove * Math.sin(Math.PI * this.mousex);
         this.nextCameraPosition.z -= this.constMove * Math.cos(Math.PI * this.mousex);
+        button = "Forward";
         break;
       }
       case Direction.Back: {
@@ -153,6 +155,7 @@ export class GameComponent implements OnInit {
         this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex);
+        button = "Back";
         break;
       }
       case Direction.Right: {
@@ -160,6 +163,7 @@ export class GameComponent implements OnInit {
         this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex + Math.PI / 2); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex + Math.PI / 2);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex + Math.PI / 2);
+        button = "Right";
         break;
       }
       case Direction.Left: {
@@ -167,6 +171,7 @@ export class GameComponent implements OnInit {
         this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex - Math.PI / 2); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex - Math.PI / 2);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex - Math.PI / 2);
+        button = "Left";
         break;
       }
     }
@@ -177,6 +182,7 @@ export class GameComponent implements OnInit {
     }
 
     if (!result) {
+      this.serverService.changePosition( { x: this.nextCameraPosition.x, z : this.nextCameraPosition.z } );
       console.log("<<< ПРОШЁЛЛЛ >>>");
       this.camera.position.x = this.nextCameraPosition.x;
       this.camera.position.z = this.nextCameraPosition.z;
@@ -184,6 +190,7 @@ export class GameComponent implements OnInit {
       console.log("<<< АТАТАТАТА >>>");
       this.nextCameraPosition.x = this.camera.position.x;
       this.nextCameraPosition.x = this.camera.position.x;
+      button = null;
     }
 
   }
@@ -283,7 +290,7 @@ export class GameComponent implements OnInit {
     this.mousey = - (event.clientY / this.renderer.domElement.clientHeight) * 2 + 1;
     this.camera.rotation.x = this.mousey / this.scale;
     this.camera.rotation.y = this.mousex / this.scale;
-    // console.log(this.mousex);
+    this.serverService.changeCameraRotation({x: this.camera.rotation.x, y: this.camera.rotation.y});
   }
 
   @HostListener('window:resize', ['$event'])
@@ -309,6 +316,7 @@ export class GameComponent implements OnInit {
     // sockets
     serverService.on(this.EVENTS.LEAVE_GAME, (result: any) => this.onLeaveGame(result));
     serverService.on(this.EVENTS.SPEED_SHANGE, (result: any) => this.onSpeedChange(result));
+    serverService.on(this.EVENTS.INFO_ABOUT_THE_GAMERS, (data: any) => this.onChangeInfoAboutTheGamers(data));
 
     // инициализация игры
 
@@ -399,6 +407,14 @@ export class GameComponent implements OnInit {
 
   speedDown() {
     this.serverService.speedDown();
+  }
+
+  onChangeInfoAboutTheGamers(data: any) {
+    if(data.result) {
+      console.log("I see you");
+    } else {
+      console.log("Fuck");
+    }
   }
 
   onSpeedChange(data: any) {
