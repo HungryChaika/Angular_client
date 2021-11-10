@@ -78,8 +78,8 @@ export class GameComponent implements OnInit {
   plane6 = this.createPlane({ x: 0, y: 15, z: 45 }, { l: 50, h: 50, b: 10 }, "#FFFF00"); //Задняя
 
 
-  plane7 = this.createPlane({ x: 25, y: 45, z: 50 }, { l: 2, h: 2, b: 2 }, "#FF0000");
-  plane8 = this.createPlane({ x: 25, y: 45, z: -50 }, { l: 2, h: 2, b: 2 }, "#000000");
+ /*  plane7 = this.createPlane({ x: 25, y: 45, z: 50 }, { l: 2, h: 2, b: 2 }, "#FF0000");
+  plane8 = this.createPlane({ x: 25, y: 45, z: -50 }, { l: 2, h: 2, b: 2 }, "#000000"); */
 
 
   cube = this.createCube();
@@ -95,9 +95,7 @@ export class GameComponent implements OnInit {
     this.plane4,
     this.plane5,
     this.plane3,
-    this.plane6,
-    this.plane7,
-    this.plane8
+    this.plane6
   ];
 
   EVENTS = this.serverService.getEvents();
@@ -140,14 +138,12 @@ export class GameComponent implements OnInit {
   }
 
   move(direction: Direction) {
-    let button = null;
     switch (direction) {
       case Direction.Forward: {
         /* this.camera.position.x -= this.constMove * Math.sin(Math.PI * this.mousex);
         this.camera.position.z -= this.constMove * Math.cos(Math.PI * this.mousex); */
         this.nextCameraPosition.x -= this.constMove * Math.sin(Math.PI * this.mousex);
         this.nextCameraPosition.z -= this.constMove * Math.cos(Math.PI * this.mousex);
-        button = "Forward";
         break;
       }
       case Direction.Back: {
@@ -155,7 +151,6 @@ export class GameComponent implements OnInit {
         this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex);
-        button = "Back";
         break;
       }
       case Direction.Right: {
@@ -163,7 +158,6 @@ export class GameComponent implements OnInit {
         this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex + Math.PI / 2); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex + Math.PI / 2);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex + Math.PI / 2);
-        button = "Right";
         break;
       }
       case Direction.Left: {
@@ -171,7 +165,6 @@ export class GameComponent implements OnInit {
         this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex - Math.PI / 2); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex - Math.PI / 2);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex - Math.PI / 2);
-        button = "Left";
         break;
       }
     }
@@ -190,7 +183,6 @@ export class GameComponent implements OnInit {
       console.log("<<< АТАТАТАТА >>>");
       this.nextCameraPosition.x = this.camera.position.x;
       this.nextCameraPosition.x = this.camera.position.x;
-      button = null;
     }
 
   }
@@ -410,7 +402,7 @@ export class GameComponent implements OnInit {
   }
 
   onChangeInfoAboutTheGamers(data: any) {
-    if(data.result) {
+    if(data) {
       console.log("I see you");
     } else {
       console.log("Fuck");
