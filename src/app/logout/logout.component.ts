@@ -29,7 +29,8 @@ export class LogoutComponent implements OnInit {
 
   onLogout(result: any) {
     if (result) {
-      this.cookieSevice.delete('token');
+      /* this.cookieSevice.delete('token'); */
+      localStorage.removeItem('token');
       this.router.navigate(['authorization']);
     }
   }

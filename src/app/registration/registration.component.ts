@@ -40,7 +40,8 @@ export class RegistrationComponent implements OnInit {
 
   onGetToken(token: String) {
     if (typeof token === 'string') {
-      this.cookieService.set('token', token);
+      /* this.cookieService.set('token', token); */
+      localStorage.setItem('token', token);
       this.router.navigate(['rooms']);
     }
   }

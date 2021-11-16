@@ -121,7 +121,8 @@ export class Server {
   }
 
   logout() {
-    const token = this.cookieService.get('token');
+    /* const token = this.cookieService.get('token'); */
+    const token = localStorage.getItem('token');
     if (token) {
       this.socket.emit(this.MESSAGES.LOGOUT, token);
     }
@@ -141,8 +142,10 @@ export class Server {
   // --------------------------
   sendMessage(message: String) {
     if (message) {
-      const token: string = this.cookieService.get('token');
-      const room: string = this.cookieService.get('room');
+      /* const token: string = this.cookieService.get('token');
+      const room: string = this.cookieService.get('room'); */
+      const token = localStorage.getItem('token');
+      const room = localStorage.getItem('room');
       this.socket.emit(this.MESSAGES.SEND_MESSAGE, { message, token, room});
     }
   }
@@ -152,7 +155,8 @@ export class Server {
   createRoom(roomName: string) {
     const data = {
       roomName,
-      token: this.cookieService.get('token')
+      /* token: this.cookieService.get('token') */
+      token: localStorage.getItem('token')
     }
     this.socket.emit(this.MESSAGES.CREATE_ROOM, data);
   }
@@ -160,15 +164,18 @@ export class Server {
   joinGame(gameName: string) {
     const data = {
       gameName,
-      token: this.cookieService.get('token')
+      /* token: this.cookieService.get('token') */
+      token: localStorage.getItem('token')
     };
     this.socket.emit(this.MESSAGES.JOIN_GAME, data);
   }
 
   leaveGame() {
     const data = {
-      gameName: this.cookieService.get('game'),
-      token: this.cookieService.get('token')
+      /* gameName: this.cookieService.get('game'),
+      token: this.cookieService.get('token') */
+      gameName: localStorage.getItem('game'),
+      token: localStorage.getItem('token')
     }
     this.socket.emit(this.MESSAGES.LEAVE_GAME, data);
   }
@@ -181,7 +188,12 @@ export class Server {
   // -------------------------------
   move(direction: Direction): void {
     this.socket.emit(
-      this.MESSAGES.MOVE, { gameName: 'firstGame', direction, token: this.cookieService.get('token')});
+      this.MESSAGES.MOVE, {
+        gameName: localStorage.getItem('game'),
+        direction,
+        /* token: this.cookieService.get('token') */
+        token: localStorage.getItem('token')
+      });
   }
 
   stopMove(): void {
@@ -191,8 +203,10 @@ export class Server {
   changePosition(position: object) {
     const data = {
       position,
-      gameName: this.cookieService.get('game'),
-      token: this.cookieService.get('token')
+      /* gameName: this.cookieService.get('game'),
+      token: this.cookieService.get('token') */
+      gameName: localStorage.getItem('game'),
+      token: localStorage.getItem('token')
     };
     this.socket.emit(this.MESSAGES.CHANGE_POSITION, data);
   }
@@ -200,8 +214,10 @@ export class Server {
   changeCameraRotation(rotationParams: object) {
     const data = {
       rotationParams,
-      gameName: this.cookieService.get('game'),
-      token: this.cookieService.get('token')
+      /* gameName: this.cookieService.get('game'),
+      token: this.cookieService.get('token') */
+      gameName: localStorage.getItem('game'),
+      token: localStorage.getItem('token')
     };
     this.socket.emit(this.MESSAGES.CHANGE_CAMERA_ROTATION, data);
   }

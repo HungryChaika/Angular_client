@@ -15,7 +15,6 @@ export const SETTINGS = {
         GET_GAMES: 'GET_GAMES',
         MOVE: 'MOVE',
         STOP_MOVE: 'STOP_MOVE',
-        CHANGE_DIRECTION: 'CHANGE_DIRECTION',
         SPEED_UP: 'SPEED_UP',
         SPEED_DOWN: 'SPEED_DOWN',
         CHANGE_PASSWORD: 'CHANGE_PASSWORD',

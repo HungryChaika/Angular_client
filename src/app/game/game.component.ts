@@ -24,20 +24,25 @@ export class GameComponent implements OnInit {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   cameraDirection = new THREE.Vector3(0, 0, 0);
   stats = new Stats();
+
   //Начальные данные для камеры
   scale = 0.3;
   mousex = 0;
   mousey = 0;
+
   //Константа для движения
   constMove = 0.4;
+
   //Для хождения (или нет) сквозь стены
-  switchWalkingThroughWalls = false;
-  nextCameraPosition = {
+  //switchWalkingThroughWalls = false;
+
+  /* nextCameraPosition = {
     x: this.camera.position.x,
     y: this.camera.position.y,
     z: this.camera.position.z
-  };
-  arrayAnalyze = [
+  }; */
+
+  /* arrayAnalyze = [
     {
       A: { x: -25, y: -10, z: -25 },
       B: { x: 25, y: -10, z: -25 },
@@ -61,9 +66,9 @@ export class GameComponent implements OnInit {
       B: { x: -25, y: -10, z: 40 },
       C: { x: -25, y: 45, z: 40 },
       D: { x: 25, y: 45, z: 40 }
-    } //plane6 */
-  ];
-
+    } //plane6
+  ];*/
+ 
 
   plane1 = this.createPlane({ x: 0, y: 15, z: -30 }, { l: 50, h: 50, b: 10 }, "#FFFFFF"); //Передняя
 
@@ -102,6 +107,14 @@ export class GameComponent implements OnInit {
 
   room: string = "";
 
+  infoAboutTheGamer = {
+    x: '',
+    y: '',
+    z: '',
+    rotateX: '',
+    rotateY: ''
+  };
+
   // выйти из игры при обновлении страницы
   /* @HostListener('window:beforeunload', ['$event'])
   onWindowOnload(event: any) {
@@ -119,50 +132,42 @@ export class GameComponent implements OnInit {
         this.chatIsVisible ? this.chatIsVisible = false : console.log('You open Menu!');
         break;
       case 'w' || 'ц':
-        this.move(Direction.Forward);
+        //this.move(Direction.Forward);
         this.serverService.move(Direction.Forward);
         break;
       case 'a' || 'ф':
-        this.move(Direction.Left);
+        //this.move(Direction.Left);
         this.serverService.move(Direction.Left);
         break;
       case 's' || 'ы':
-        this.move(Direction.Back);
+        //this.move(Direction.Back);
         this.serverService.move(Direction.Back);
         break;
       case 'd' || 'в':
-        this.move(Direction.Right);
+        //this.move(Direction.Right);
         this.serverService.move(Direction.Right);
         break;
     }
   }
 
-  move(direction: Direction) {
+  /* move(direction: Direction) {
     switch (direction) {
       case Direction.Forward: {
-        /* this.camera.position.x -= this.constMove * Math.sin(Math.PI * this.mousex);
-        this.camera.position.z -= this.constMove * Math.cos(Math.PI * this.mousex); */
         this.nextCameraPosition.x -= this.constMove * Math.sin(Math.PI * this.mousex);
         this.nextCameraPosition.z -= this.constMove * Math.cos(Math.PI * this.mousex);
         break;
       }
       case Direction.Back: {
-        /* this.camera.position.x += this.constMove * Math.sin(Math.PI * this.mousex);
-        this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex);
         break;
       }
       case Direction.Right: {
-        /* this.camera.position.x += this.constMove * Math.sin(Math.PI * this.mousex + Math.PI / 2);
-        this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex + Math.PI / 2); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex + Math.PI / 2);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex + Math.PI / 2);
         break;
       }
       case Direction.Left: {
-        /* this.camera.position.x += this.constMove * Math.sin(Math.PI * this.mousex - Math.PI / 2);
-        this.camera.position.z += this.constMove * Math.cos(Math.PI * this.mousex - Math.PI / 2); */
         this.nextCameraPosition.x += this.constMove * Math.sin(Math.PI * this.mousex - Math.PI / 2);
         this.nextCameraPosition.z += this.constMove * Math.cos(Math.PI * this.mousex - Math.PI / 2);
         break;
@@ -182,14 +187,14 @@ export class GameComponent implements OnInit {
     } else {
       console.log("<<< АТАТАТАТА >>>");
       this.nextCameraPosition.x = this.camera.position.x;
-      this.nextCameraPosition.x = this.camera.position.x;
+      this.nextCameraPosition.z = this.camera.position.z;
     }
 
-  }
+  } */
 
 
 
-  analyze(nowPosition: any, nextPosition: any) {
+  /* analyze(nowPosition: any, nextPosition: any) {
     let result = false;
     for (let i = 0; i < this.arrayAnalyze.length; i++) {
       let polygon = this.arrayAnalyze[i];
@@ -209,7 +214,7 @@ export class GameComponent implements OnInit {
       };
     };
     return result;
-  }
+  } */
 
 
 
@@ -323,8 +328,10 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    !this.cookieService.get('token') ? this.router.navigate(['authorization']) : null;
-    !this.cookieService.get('game') ? this.router.navigate(['rooms']) : null;
+    /* !this.cookieService.get('token') ? this.router.navigate(['authorization']) : null;
+    !this.cookieService.get('game') ? this.router.navigate(['rooms']) : null; */
+    !localStorage.getItem('token') ? this.router.navigate(['authorization']) : null;
+    !localStorage.getItem('game') ? this.router.navigate(['rooms']) : null;
 
 
     // scene initialization
@@ -387,7 +394,8 @@ export class GameComponent implements OnInit {
 
   onLeaveGame(data: any) {
     if (data.result) {
-      this.cookieService.get('game') ? this.cookieService.delete('game') : null;
+      /* this.cookieService.get('game') ? this.cookieService.delete('game') : null; */
+      localStorage.getItem('game') ? localStorage.removeItem('game') : null;
       this.router.navigate(['rooms']);
     }
   }
@@ -417,21 +425,6 @@ export class GameComponent implements OnInit {
       this.constMove -= 0.5;
     }
   }
-
-  controlAnalyze() {
-    if (this.switchWalkingThroughWalls) {
-      this.switchWalkingThroughWalls = false;
-    } else {
-      this.switchWalkingThroughWalls = true;
-    }
-    console.log(this.switchWalkingThroughWalls);
-    this.camera.position.x = 0;
-    this.camera.position.z = 0;
-    this.nextCameraPosition.x = 0;
-    this.nextCameraPosition.z = 0;
-  }
-
-
 
   addLight() {
     this.renderer.shadowMap.enabled = true;

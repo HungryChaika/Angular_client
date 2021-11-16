@@ -28,7 +28,7 @@ export class RoomsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.cookieService.get('token')) {
+    if (/* !this.cookieService.get('token') */ !localStorage.getItem('token')) {
       this.router.navigate(['authorization']);
     } else {
       this.serverService.getRooms();
@@ -44,7 +44,8 @@ export class RoomsComponent implements OnInit {
   }
 
   onCreateRoom(data: any): void {
-    this.cookieService.set('room', data.room);
+    /* this.cookieService.set('room', data.room); */
+    localStorage.setItem('room', data.room);
     data ? this.router.navigate(['game']) : null;
   }
 
@@ -54,7 +55,8 @@ export class RoomsComponent implements OnInit {
 
   onJoinGame(data: any) {
     if (data.result) {
-      this.cookieService.set('game', String(data.gameName));
+      /* this.cookieService.set('game', String(data.gameName)); */
+      localStorage.setItem('game', String(data.gameName));
       this.router.navigate(['game']);
     }
   }
