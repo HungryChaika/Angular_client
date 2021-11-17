@@ -103,6 +103,10 @@ export class GameComponent implements OnInit {
     this.plane6
   ];
 
+  gamersModels =[
+
+  ];
+
   EVENTS = this.serverService.getEvents();
 
   room: string = "";
@@ -409,11 +413,31 @@ export class GameComponent implements OnInit {
     this.serverService.speedDown();
   }
 
-  onChangeInfoAboutTheGamers(data: any) {
-    if(data) {
-      console.log("I see you");
-    } else {
-      console.log("Fuck");
+  createGamerAndAddToArray({ x = 0, y = 0, z = 0}) {
+    const geometry = new THREE.SphereGeometry(2, 20, 20);
+    const material = new THREE.MeshPhongMaterial({
+      color: 0xcdf525,
+      /* emissive: 0x000000,
+      specular: 0xbcbcbc, */
+    });
+    const gamerModel = new THREE.Mesh(geometry, material);
+    gamerModel.position.set(x, y, z);
+    /* sphere.castShadow = true;
+    sphere.receiveShadow = true; */
+    //this.gamersModels.push(gamerModel); ОШИИИБКА!!!
+  }
+
+  onChangeInfoAboutTheGamers( gamers: any ) {
+    const token : string | null = localStorage.getItem('token');
+    if( typeof(token) === "string") delete gamers[token];
+    for( let gamer in gamers) { // hp, x, y, z, rotation, constMove, scale, mousex, mousey
+      const paramsPrint = {
+        x: gamers[gamer].x,
+        y: gamers[gamer].y,
+        z: gamers[gamer].z,
+
+      };
+      
     }
   }
 
@@ -450,6 +474,7 @@ export class GameComponent implements OnInit {
 
   initElems() {
     this.sceneElems.forEach(elem => this.scene.add(elem));
+    this.gamersModels.forEach(elem => this.scene.add(elem));
   }
 
   createCube() {
