@@ -38,7 +38,6 @@ export class AuthorizationComponent implements OnInit {
 
   onGetToken(data: any) {
     if (data.result && typeof data.token === 'string') {
-      /* this.cookieService.set('token', data.token); */
       localStorage.setItem('token', data.token);
       this.router.navigate(['rooms']);
     }

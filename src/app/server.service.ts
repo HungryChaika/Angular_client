@@ -68,10 +68,6 @@ export class ServerService {
     this.server.stopMove();
   }
 
-  changePosition( position: object ) {
-    this.server.changePosition( position );
-  }
-
   changeCameraRotation(rotationParams: object) {
     this.server.changeCameraRotation(rotationParams);
   }
